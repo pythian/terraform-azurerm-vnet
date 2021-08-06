@@ -31,7 +31,21 @@ module "vnet" {
     subnet2 = ["Microsoft.Storage", "Microsoft.Sql"],
     subnet3 = ["Microsoft.AzureActiveDirectory"]
   }
-
+  
+  delegation_name = { 
+    subnet2 = "Subnet2_function_delegation", 
+    subnet3 = "Subnet3_function_delegation"
+    }
+    
+  service_delegation_name = { 
+    subnet2 = "Microsoft.Web/serverFarms", 
+    subnet3 = "Microsoft.Web/serverFarms"
+  }
+  
+  service_delegation_actions = { 
+    subnet2 = ["Microsoft.Network/virtualNetworks/subnets/action"], 
+    subnet3 = ["Microsoft.Network/virtualNetworks/subnets/action"]}
+  
   tags = {
     environment = "dev"
     costcenter  = "it"
