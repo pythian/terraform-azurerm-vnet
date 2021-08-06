@@ -21,6 +21,18 @@ resource "azurerm_subnet" "subnet" {
   service_endpoints                              = lookup(var.subnet_service_endpoints, var.subnet_names[count.index], null)
   enforce_private_link_endpoint_network_policies = lookup(var.subnet_enforce_private_link_endpoint_network_policies, var.subnet_names[count.index], false)
   enforce_private_link_service_network_policies  = lookup(var.subnet_enforce_private_link_service_network_policies, var.subnet_names[count.index], false)
+
+  dynamic "delegation" {
+    for_each = lookup(var.delegation_name, var.subnet_names[count.index], null) == null ? []:[1]
+    content {
+      name = lookup(var.delegation_name, var.subnet_names[count.index], null)
+      service_delegation {
+        # name    = "Microsoft.Web/serverFarms"
+        name    = lookup(var.service_delegation_name, var.subnet_names[count.index], null)
+        actions = lookup(var.service_delegation_actions, var.subnet_names[count.index], null)
+      }
+    }
+  }
 }
 
 locals {
